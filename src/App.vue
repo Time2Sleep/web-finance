@@ -19,9 +19,9 @@ const axiosInstance = axios.create({
 const handleClick = () => {
   const bodyFormData = new FormData();
   bodyFormData.append('action', mode.value);
-  bodyFormData.append('date', date.value);
-  bodyFormData.append('cat', curCat.value);
-  bodyFormData.append('sum', number.value);
+  bodyFormData.append('date', date.value.format('YYYY.MM.DD'));
+  bodyFormData.append('cat', curCat.value.toString());
+  bodyFormData.append('sum', number.value.toString());
   bodyFormData.append('desc', desc.value);
   axiosInstance.post('', bodyFormData, {
     headers: {
@@ -29,7 +29,7 @@ const handleClick = () => {
     }
   }).then(() => {
     message.success('Сохранено');
-
+    reset();
   })
 };
 
@@ -63,7 +63,6 @@ onMounted(() => {
 <template>
   <a-spin v-if="!visible"/>
   <div v-else class="container">
-    {{curCat}}
     <a-date-picker v-model:value="date"/>
 
     <a-radio-group v-model:value="mode">
@@ -75,7 +74,7 @@ onMounted(() => {
 
     <a-input-number id="inputNumber" placeholder="Сумма" v-model:value="number" :min="1"/>
 
-    <a-textarea placeholder="Комментарий" v-model="desc"/>
+    <a-textarea placeholder="Комментарий" v-model:value="desc"/>
 
     <a-button type="primary" :disabled="number <= 0 || !curCat" @click="handleClick">Сохранить</a-button>
   </div>
