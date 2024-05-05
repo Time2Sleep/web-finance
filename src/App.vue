@@ -9,7 +9,7 @@ const date = ref(dayjs());
 const number = ref();
 const cats = ref([]);
 const earnCats = ref([]);
-const curCat = ref(null);
+const curCat = ref('');
 const desc = ref('');
 
 const axiosInstance = axios.create({
@@ -20,7 +20,7 @@ const handleClick = () => {
   const bodyFormData = new FormData();
   bodyFormData.append('action', mode.value);
   bodyFormData.append('date', date.value.format('YYYY.MM.DD'));
-  bodyFormData.append('cat', curCat.value.toString());
+  bodyFormData.append('cat', curCat.value);
   bodyFormData.append('sum', number.value.toString());
   bodyFormData.append('desc', desc.value);
   axiosInstance.post('', bodyFormData, {
