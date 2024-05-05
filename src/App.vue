@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import dayjs from "dayjs";
 import axios from "axios";
+import {message} from "ant-design-vue";
 
 const mode = ref('rashod');
 const date = ref(dayjs());
-const number = ref(0);
+const number = ref();
 const cats = ref([]);
 const earnCats = ref([]);
 const curCat = ref(null);
@@ -15,29 +16,53 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL
 });
 
-console.log('env', import.meta.env);
-
-axiosInstance.get('')
-  .then(({data}) => {
-    console.log(data)
-    cats.value = data.cats.map(x => ({value: x, label: x}));
-    earnCats.value = data.cats2.map(x => ({value: x, label: x}));
-  })
-  .catch(err => console.log(err));
-
 const handleClick = () => {
-  axiosInstance.post('', {
-    action: mode.value,
-    date: date.value,
-    cat: curCat.value,
-    sum: number.value,
-    desc: desc.value
+  const bodyFormData = new FormData();
+  bodyFormData.append('action', mode.value);
+  bodyFormData.append('date', date.value);
+  bodyFormData.append('cat', curCat.value);
+  bodyFormData.append('sum', number.value);
+  bodyFormData.append('desc', desc.value);
+  axiosInstance.post('', bodyFormData, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then(() => {
+    message.success('Сохранено');
+
   })
 };
+
+const reset = () => {
+  number.value = null;
+  desc.value = '';
+}
+
+const visible = ref(false);
+
+const init = () => {
+  visible.value = true;
+
+  axiosInstance.get('')
+      .then(({data}) => {
+        console.log(data)
+        cats.value = data.cats.map((x: string) => ({value: x, label: x}));
+        earnCats.value = data.cats2.map((x: string) => ({value: x, label: x}));
+      })
+      .catch(err => console.log(err));
+}
+
+onMounted(() => {
+  if(location.search === import.meta.env.VITE_API_SECRET) {
+    init()
+  }
+
+})
 </script>
 
 <template>
-  <div class="container">
+  <a-spin v-if="!visible"/>
+  <div v-else class="container">
     {{curCat}}
     <a-date-picker v-model:value="date"/>
 
