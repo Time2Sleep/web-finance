@@ -116,10 +116,6 @@ const otloPercent = computed(() => ((mainData.value.monthDohod - mainData.value.
         <div class="text-end">{{ desc }}</div>
       </div>
     </div>
-
-    <div>В этом месяце потрачено: {{ mainData.monthRashod.toLocaleString() }} руб</div>
-    <div>В этом месяце заработано: {{ mainData.monthDohod.toLocaleString() }} руб</div>
-    <div>Разница: {{ (mainData.monthDohod - mainData.monthRashod).toLocaleString() }} руб ({{ otloPercent }}%)</div>
     <a-date-picker v-model:value="date"/>
 
     <a-radio-group v-model:value="mode">
@@ -138,6 +134,10 @@ const otloPercent = computed(() => ((mainData.value.monthDohod - mainData.value.
     <div class="quick">
       <a-button v-for="quick in quicks" class="quick__btn" @click="handleQuickClick(quick)">{{quick.desc}}</a-button>
     </div>
+
+<div class="text-s">В этом месяце потрачено: {{ mainData.monthRashod.toLocaleString() }} руб</div>
+<div class="text-s">В этом месяце заработано: {{ mainData.monthDohod.toLocaleString() }} руб</div>
+<div class="text-s">Разница: {{ (mainData.monthDohod - mainData.monthRashod).toLocaleString() }} руб ({{ otloPercent }}%)</div>
     <div class="all-sum">
       <div>За год потрачено: {{ mainData.yearRashod.toLocaleString() }} руб</div>
       <div>За год заработано: {{ mainData.yearDohod.toLocaleString() }} руб</div>
@@ -207,5 +207,9 @@ const otloPercent = computed(() => ((mainData.value.monthDohod - mainData.value.
     padding: 4px !important;
     margin-right: 4px;
   }
+}
+
+.text-s{
+  font-size: 0.8rem;
 }
 </style>: { date: string | number | dayjs.Dayjs | Date | null | undefined; }: { date: string | number | dayjs.Dayjs | Date | null | undefined; }
