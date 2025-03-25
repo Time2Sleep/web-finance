@@ -3,25 +3,14 @@ import { computed } from 'vue';
 import { useFinance } from '../composables/useFinance';
 
 const { finances } = useFinance();
-
-const monthPercent = computed<string>(() => {
-    const income = finances.value.month.income;
-    const outcome = finances.value.month.outcome;
-
-    if(!income) return '100';
-
-    return ((income - outcome) / income * 100).toFixed(2);
-});
 </script>
 
 <template>
     <div class="stats" v-if="finances">
-        <div>В этом месяце потрачено: {{ finances.month.outcome.toLocaleString() }} руб</div>
-        <div>В этом месяце заработано: {{ finances.month.income.toLocaleString() }} руб</div>
-        <div>Разница: {{ (finances.month.income - finances.month.outcome).toLocaleString() }} руб ({{ monthPercent }}%)</div>
-        <div>За год потрачено: {{ finances.year.outcome.toLocaleString() }} руб</div>
-        <div>За год заработано: {{ finances.year.income.toLocaleString() }} руб</div>
-        <div>Капитал: {{ finances.total.toLocaleString() }} руб</div>
+        <div v-for="data in finances" class="row">
+          <div>{{ data.label }}</div>
+          <div>{{ data.value }}</div>
+        </div>
     </div>
 </template>
 
@@ -30,4 +19,6 @@ const monthPercent = computed<string>(() => {
   margin: auto auto 20px;
   font-size: 0.8rem;
 }
+
+.row { display: flex; justify-content: space-between; width: 100%; }
 </style>
