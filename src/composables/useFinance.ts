@@ -1,5 +1,5 @@
 import { reactive, ref } from "vue";
-import { Finances, IOption, IQuickTip, IRowData, INewRowParams } from "../types/common";
+import { IOption, IQuickTip, IRowData, INewRowParams, IFinanceStats } from "../types/common";
 import { fetchFinanceData, saveNewRow } from "../service/httpService";
 import { message } from "ant-design-vue";
 
@@ -9,11 +9,7 @@ const categories = reactive<{income: IOption[], outcome: IOption[]}>({
 });
 const lastPurchases = ref<IRowData[]>([]);
 const quickTips = ref<IQuickTip[]>([]);
-const finances = ref<Finances>({
-    total: 0,
-    year: { income: 0, outcome: 0 },
-    month: { income: 0, outcome: 0 }
-});
+const finances = ref<IFinanceStats[]>([]);
 const isDataLoading = ref<boolean>(false);
 
 export const useFinance = () => {
@@ -34,14 +30,14 @@ export const useFinance = () => {
                 incomeCategories,
                 lastPurchases: last,
                 quickTips: tips,
-                ...rest
+                stats
             } = data;
 
             categories.income = incomeCategories.map(cat => ({label: cat, value: cat}));
             categories.outcome = outcomeCategories.map(cat => ({label: cat, value: cat}));
             lastPurchases.value = last;
             quickTips.value = tips;
-            finances.value = rest;
+            finances.value = stats;
         } catch (e) {
             console.log(e);
         }

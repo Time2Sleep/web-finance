@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useFinance } from '../composables/useFinance';
 
 const { finances } = useFinance();

@@ -1,3 +1,5 @@
+
+
 export interface IDefaultResponse {
     message: string;
 }
@@ -19,20 +21,18 @@ export interface IQuickTip {
     description: string
 }
 
+export interface IFinanceStats{
+    label: string,
+    value: string,
+    full?: IFinanceStats[]
+}
+
 export interface IFinanceData {
     outcomeCategories: string[],
     incomeCategories: string[],
     lastPurchases: IRowData[],
     quickTips: IQuickTip[],
-    total: number,
-    year: {
-        income: number,
-        outcome: number
-    },
-    month: {
-        income: number,
-        outcome: number
-    }
+    stats: IFinanceStats[]
 }
 
 export type Finances = Omit<IFinanceData, 'outcomeCategories'|'incomeCategories'|'lastPurchases'|'quickTips'>
