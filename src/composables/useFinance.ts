@@ -2,6 +2,7 @@ import { reactive, ref } from "vue";
 import { IOption, IQuickTip, IRowData, INewRowParams, IFinanceStats } from "../types/common";
 import { fetchFinanceData, saveNewRow } from "../service/httpService";
 import { message } from "ant-design-vue";
+import dayjs from "dayjs";
 
 const categories = reactive<{income: IOption[], outcome: IOption[]}>({
     income: [],
@@ -30,12 +31,16 @@ export const useFinance = () => {
                 incomeCategories,
                 lastPurchases: last,
                 quickTips: tips,
+                lastIncomes: incomes,
                 stats
             } = data;
 
             categories.income = incomeCategories.map(cat => ({label: cat, value: cat}));
             categories.outcome = outcomeCategories.map(cat => ({label: cat, value: cat}));
-            lastPurchases.value = last;
+            lastPurchases.value = [
+                ...last.map(data => ({ ...data, type: 'outcome' })),
+                ...incomes.map(data => ({ ...data, type: 'income'}))
+            ].sort((a,b) => dayjs(a.date).isBefore(b.date) ? -1 : 1);
             quickTips.value = tips;
             finances.value = stats;
         } catch (e) {

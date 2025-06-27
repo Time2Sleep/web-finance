@@ -16,11 +16,11 @@ onBeforeMount(() => {
 
     <a-spin :spinning="isDataLoading">
         <LastPurchases class="mb"/>
+    </a-spin>
 
         <MainForm/>
 
         <FinanceStatistics/>
-    </a-spin>
   </template>
 
 <style lang="scss" scoped>

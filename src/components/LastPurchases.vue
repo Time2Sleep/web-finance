@@ -15,10 +15,10 @@ watch(isDataLoading, () => {
 
 <template>
     <div class="last" ref="container">
-        <div v-for="{date,category,sum,description} in lastPurchases" class="last__row">
+        <div v-for="{date,category,sum,description,type} in lastPurchases" class="last__row" :class="type">
             <div>{{ dayjs(date).format('DD.MM.YYYY') }}</div>
             <div class="last__category">{{ category }}</div>
-            <div>{{ sum }}р</div>
+            <div>{{ (type === 'income' ? '+' : '-') + sum.toLocaleString('ru') }}р</div>
             <div class="last__description">{{ description }}</div>
         </div>
     </div>
@@ -35,6 +35,11 @@ watch(isDataLoading, () => {
         grid-template-columns: 2fr 4fr 1fr 2fr;
         font-size: 10px !important;
         border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: rgb(180, 0, 0);
+
+        &.income {
+            color: rgb(0, 180, 0)
+        }
     }
 
     &__category{

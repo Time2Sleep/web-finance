@@ -12,7 +12,8 @@ export interface IRowData {
     date: string,
     category: string,
     sum: number,
-    description: string
+    description: string,
+    type?: string
 }
 
 export interface IQuickTip {
@@ -31,6 +32,7 @@ export interface IFinanceData {
     outcomeCategories: string[],
     incomeCategories: string[],
     lastPurchases: IRowData[],
+    lastIncomes: IRowData[],
     quickTips: IQuickTip[],
     stats: IFinanceStats[]
 }
