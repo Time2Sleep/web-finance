@@ -8,7 +8,7 @@ const { categories, quickTips, saveNew } = useFinance();
 
 const date = ref<Dayjs>(dayjs());
 const mode = ref<'income'|'outcome'>('outcome');
-const curCat = ref<string>('');
+const curCat = ref<string|null>(null);
 const sum = ref<number>();
 const description = ref<string>('');
 
@@ -49,24 +49,32 @@ const resetValues = () => {
 </script>
 
 <template>
-    <div class="main-form">
-        <a-date-picker v-model:value="date" class="main-form__item"/>
+    <div class="main-form space-y-2 border p-3 rounded">
+        <a-date-picker v-model:value="date" class="w-full border p-2 rounded"/>
 
-        <a-radio-group v-model:value="mode" class="main-form__item" @change="handleModeChange">
-            <a-radio-button class="main-form__radio" value="outcome">Расход</a-radio-button>
-            <a-radio-button class="main-form__radio" value="income">Доход</a-radio-button>
-        </a-radio-group>
+        <div className="flex space-x-2">
+          <button
+              class="flex-1 p-2 rounded"
+              :class="mode === 'outcome' ? 'bg-blue-500 text-white' : 'bg-gray-200'"
+              @click="mode = 'outcome'"
+          >Расход</button>
+          <button
+              class="flex-1 p-2 rounded"
+              :class="mode === 'income' ? 'bg-green-500 text-white' : 'bg-gray-200'"
+              @click="mode = 'income'"
+          >Доход</button>
+        </div>
 
-        <a-select v-model:value="curCat" class="main-form__item" :options="categoriesOptions" placeholder="Категория" :dropdownMatchSelectWidth="false"/>
+        <a-select v-model:value="curCat" class="main-form__item main-form__select" :options="categoriesOptions" placeholder="Выберите категорию" :dropdownMatchSelectWidth="false"/>
 
-        <a-input-number class="main-form__item" placeholder="Сумма" v-model:value="sum" :min="0"/>
+        <input type="number" class="w-full border p-2 rounded" placeholder="Сумма" v-model="sum" :min="0"/>
 
-        <a-textarea class="main-form__item main-form__textarea" placeholder="Комментарий" v-model:value="description"/>
+        <input class="w-full border p-2 rounded" placeholder="Комментарий" v-model="description"/>
 
-        <a-button class="main-form__item" type="primary" :disabled="isBtnDisabled" @click="handleSubmit">Сохранить</a-button>
+        <button class="w-full text-white p-2 rounded disabled:bg-gray-400 " :disabled="isBtnDisabled" @click="handleSubmit" :class="mode === 'income' ? 'bg-green-500' : 'bg-blue-500'">Добавить</button>
 
         <div class="main-form__item main-form__quick">
-            <a-button v-for="quick in quickTips" class="main-form__quick-item" @click="handleQuickClick(quick)">{{quick.title}}</a-button>
+            <a-button v-for="quick in quickTips" class="bg-gray-200 px-2 py-1 rounded" @click="handleQuickClick(quick)">{{quick.title}}</a-button>
         </div>
     </div>    
 </template>
@@ -76,6 +84,16 @@ const resetValues = () => {
     display: flex;
     flex-direction: column;
 
+    font-size: 16px;
+
+    &__select{
+      &:deep(.ant-select-selector){
+        height: 40px;
+        padding: 4px 16px;
+        font-size: 16px;
+        font-family: Roboto, Inter, sans-serif;
+      }
+    }
     &__item{
         width: 100%;
         margin-bottom: 8px;

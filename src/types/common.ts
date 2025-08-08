@@ -10,7 +10,7 @@ export interface IAuthResponse extends IDefaultResponse {
 
 export interface IRowData {
     date: string,
-    category: string,
+    category: string|null,
     sum: number,
     description: string,
     type?: string

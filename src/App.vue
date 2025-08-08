@@ -19,7 +19,8 @@ const { isAuthenticated } = useAuth();
   flex-direction: column;
   margin: 0 auto;
   width: 100%;
-  height: 100%;
-  max-width: 320px;
+  min-height: 90vh;
+  height: max-content;
+  max-width: 100vw;
 }
 </style>

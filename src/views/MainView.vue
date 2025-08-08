@@ -16,11 +16,13 @@ onBeforeMount(() => {
 
     <a-spin :spinning="isDataLoading">
         <LastPurchases class="mb"/>
+
+        <MainForm class="mb-4"/>
     </a-spin>
 
-        <MainForm/>
-
         <FinanceStatistics/>
+
+        <a-typography-link class="mt-auto" href="https://docs.google.com/spreadsheets/d/1UHOsQObjhDRyhDaJbWmlOdfFD2akzu1EOd8Xrht871A">Основная таблица</a-typography-link>
   </template>
 
 <style lang="scss" scoped>

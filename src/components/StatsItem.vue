@@ -17,14 +17,13 @@ const isActive = ref(false);
         </div>
 
         <div class="stats-item__children" v-if="isActive && data.full?.length">
-            <StatsItem v-for="child in data.full" :data="child"/>
+            <StatsItem v-for="child in data.full" :data="child" class="border-l pl-4"/>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .stats-item {
-  font-size: 0.8rem;
   width: 100%;
 
   &__row {

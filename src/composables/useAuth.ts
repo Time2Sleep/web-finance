@@ -3,7 +3,7 @@ import { authRequest } from "../service/httpService";
 import { message } from "ant-design-vue";
 
 const password = ref<string>(localStorage.getItem('password') || '');
-const isAuthenticated = ref<boolean>(false);
+const isAuthenticated = ref<boolean>(!!password.value);
 const isLoading = ref<boolean>(false);
 
 export const useAuth = () => {

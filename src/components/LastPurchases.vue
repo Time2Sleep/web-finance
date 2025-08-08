@@ -15,11 +15,11 @@ watch(isDataLoading, () => {
 
 <template>
     <div class="last" ref="container">
-        <div v-for="{date,category,sum,description,type} in lastPurchases" class="last__row" :class="type">
-            <div>{{ dayjs(date).format('DD.MM.YYYY') }}</div>
+        <div v-for="{date,category,sum,description,type} in lastPurchases" class="last__row py-0.5">
+            <div class="text-left">{{ dayjs(date).format('DD.MM.YYYY') }}</div>
             <div class="last__category">{{ category }}</div>
-            <div>{{ (type === 'income' ? '+' : '-') + sum.toLocaleString('ru') }}р</div>
             <div class="last__description">{{ description }}</div>
+            <div class="last__price" :class="type">{{ (type === 'income' ? '+' : '-') + sum.toLocaleString('ru') }}р</div>
         </div>
     </div>
 </template>
@@ -32,14 +32,9 @@ watch(isDataLoading, () => {
 
     &__row {
         display: grid;
-        grid-template-columns: 2fr 4fr 1fr 2fr;
-        font-size: 10px !important;
+        grid-template-columns: 3fr 7fr 4fr 3fr;
+        font-size: 14px !important;
         border-bottom: 1px solid rgba(0,0,0,0.05);
-        color: rgb(180, 0, 0);
-
-        &.income {
-            color: rgb(0, 180, 0)
-        }
     }
 
     &__category{
@@ -47,7 +42,16 @@ watch(isDataLoading, () => {
     }
 
     &__description{
-        text-align: end;
+        text-align: left;
+    }
+
+    &__price {
+      color: rgb(180, 0, 0);
+      text-align: end;
+
+      &.income {
+        color: rgb(0, 180, 0)
+      }
     }
 }
 </style>

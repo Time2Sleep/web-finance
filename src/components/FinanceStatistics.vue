@@ -6,15 +6,9 @@ const { finances } = useFinance();
 </script>
 
 <template>
-    <div class="stats" v-if="finances">
-      <StatsItem v-for="data in finances" :data="data"/>
-    </div>
-</template>
+  <div className="border p-3 rounded mb-4" v-if="finances.length">
+    <h2 className="text-lg font-bold mb-2">Статистика</h2>
 
-<style scoped lang="scss">
-.stats{
-width: 100%;
-  margin: auto auto 20px;
-  font-size: 0.8rem;
-}
-</style>
+    <StatsItem v-for="data in finances" :data="data"/>
+  </div>
+</template>
