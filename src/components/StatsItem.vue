@@ -25,6 +25,7 @@ const isActive = ref(false);
 <style scoped lang="scss">
 .stats-item {
   width: 100%;
+  font-size: 14px;
 
   &__row {
     display: flex; 

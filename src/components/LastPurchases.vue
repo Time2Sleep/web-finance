@@ -16,10 +16,14 @@ watch(isDataLoading, () => {
 <template>
     <div class="last" ref="container">
         <div v-for="{date,category,sum,description,type} in lastPurchases" class="last__row py-0.5">
+          <div class="flex w-full justify-between">
             <div class="text-left">{{ dayjs(date).format('DD.MM.YYYY') }}</div>
-            <div class="last__category">{{ category }}</div>
-            <div class="last__description">{{ description }}</div>
             <div class="last__price" :class="type">{{ (type === 'income' ? '+' : '-') + sum.toLocaleString('ru') }}р</div>
+          </div>
+          <div class="flex  w-full justify-between last__description">
+            <div class="last__category">{{description}}</div>
+            <div class="last__category">{{category}}</div>
+          </div>
         </div>
     </div>
 </template>
@@ -31,8 +35,6 @@ watch(isDataLoading, () => {
     overflow-y: auto;
 
     &__row {
-        display: grid;
-        grid-template-columns: 3fr 7fr 4fr 3fr;
         font-size: 14px !important;
         border-bottom: 1px solid rgba(0,0,0,0.05);
     }
@@ -43,6 +45,7 @@ watch(isDataLoading, () => {
 
     &__description{
         text-align: left;
+        font-size: 10px;
     }
 
     &__price {

@@ -38,10 +38,6 @@ const handleQuickClick = (quick: IQuickTip) => {
     curCat.value = category;
 };
 
-const handleModeChange = () => {
-    curCat.value = categoriesOptions.value[0]?.value ?? '';
-};
-
 const resetValues = () => {
     sum.value = undefined;
     description.value = '';
