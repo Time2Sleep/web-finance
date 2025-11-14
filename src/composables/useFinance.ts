@@ -1,5 +1,5 @@
 import { reactive, ref } from "vue";
-import { IOption, IQuickTip, IRowData, INewRowParams, IFinanceStats } from "../types/common";
+import { IOption, IQuickTip, IRowData, INewRowParams, IFinanceStats, IFinanceData } from "../types/common";
 import { fetchFinanceData, saveNewRow } from "../service/httpService";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
@@ -19,8 +19,9 @@ export const useFinance = () => {
     const getDataFromGoogleSheets = async () => {
         isDataLoading.value = true;
 
-        if(localStorage.getItem('data')){
-            setData(JSON.parse(localStorage.getItem('data')));
+        const stored = localStorage.getItem('data');
+        if(stored){
+            setData(JSON.parse(stored));
         } 
             
 
@@ -58,7 +59,7 @@ export const useFinance = () => {
             lastPurchases.value[lastPurchases.value.length - 1].loading = false;
 
             message.success(data.message);
-            
+
             saveValuesToLocalStorage();
 
             return true;
@@ -72,7 +73,7 @@ export const useFinance = () => {
         
     };
 
-    const setData = (data) => {
+    const setData = (data: IFinanceData) => {
         const {
             outcomeCategories,
             incomeCategories,

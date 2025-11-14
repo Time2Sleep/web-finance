@@ -22,7 +22,7 @@ const isBtnDisabled = computed<boolean>(() => {
 const handleSubmit = async () => {
     pending.value = true;
 
-    const saved = await saveNew({
+    await saveNew({
         date: date.value.format('YYYY-MM-DD'),
         sum: sum.value!.toString(),
         action: mode.value,

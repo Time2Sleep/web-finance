@@ -14,7 +14,7 @@ export interface IRowData {
     sum: number,
     description: string,
     type?: string,
-    loading: boolean
+    loading?: boolean
 }
 
 export interface IQuickTip {
