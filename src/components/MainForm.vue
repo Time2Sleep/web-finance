@@ -13,12 +13,15 @@ const sum = ref<number>();
 const description = ref<string>('');
 
 const categoriesOptions = computed<IOption[]>(() => categories[mode.value]);
+const pending = ref<boolean>(false);
 
 const isBtnDisabled = computed<boolean>(() => {
-    return !sum.value || sum.value <= 0 || !curCat.value || !date.value
+    return !sum.value || sum.value <= 0 || !curCat.value || !date.value || pending.value
 });
 
 const handleSubmit = async () => {
+    pending.value = true;
+
     const saved = await saveNew({
         date: date.value.format('YYYY-MM-DD'),
         sum: sum.value!.toString(),
@@ -27,8 +30,7 @@ const handleSubmit = async () => {
         category: curCat.value
     });
 
-    if(saved)
-        resetValues();
+    setTimeout(resetValues, 1000);
 };
 
 const handleQuickClick = (quick: IQuickTip) => {
@@ -39,6 +41,7 @@ const handleQuickClick = (quick: IQuickTip) => {
 };
 
 const resetValues = () => {
+    pending.value = false;
     sum.value = undefined;
     description.value = '';
 }

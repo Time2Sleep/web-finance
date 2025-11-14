@@ -12,37 +12,28 @@ const lastPurchases = ref<IRowData[]>([]);
 const quickTips = ref<IQuickTip[]>([]);
 const finances = ref<IFinanceStats[]>([]);
 const isDataLoading = ref<boolean>(false);
+const isNewAdding = ref<boolean>(false);
 
 export const useFinance = () => {
 
     const getDataFromGoogleSheets = async () => {
         isDataLoading.value = true;
 
+        if(localStorage.getItem('data')){
+            setData(JSON.parse(localStorage.getItem('data')));
+        } 
+            
+
         try {
             const { data } = await fetchFinanceData();
+            isDataLoading.value = true;
             
             if ('message' in data) {
                message.error(data.message);
                return;
             }
             
-            const {
-                outcomeCategories,
-                incomeCategories,
-                lastPurchases: last,
-                quickTips: tips,
-                lastIncomes: incomes,
-                stats
-            } = data;
-
-            categories.income = incomeCategories.map(cat => ({label: cat, value: cat}));
-            categories.outcome = outcomeCategories.map(cat => ({label: cat, value: cat}));
-            lastPurchases.value = [
-                ...last.map(data => ({ ...data, type: 'outcome' })),
-                ...incomes.map(data => ({ ...data, type: 'income'}))
-            ].sort((a,b) => dayjs(a.date).isBefore(b.date) ? -1 : 1);
-            quickTips.value = tips;
-            finances.value = stats;
+            setData(data);            
         } catch (e) {
             console.log(e);
         }
@@ -51,22 +42,68 @@ export const useFinance = () => {
     }
 
     const saveNew = async (params: INewRowParams) => {
-        isDataLoading.value = true;
-
+        isNewAdding.value = true;
         try {
+            const newRow = {
+                ...params,
+                type: params.action,
+                sum: +params.sum,
+                loading: true
+            };
+
+            lastPurchases.value.push(newRow);
+
             const { data } = await saveNewRow(params);
 
-            message.success(data.message);
+            lastPurchases.value[lastPurchases.value.length - 1].loading = false;
 
-            getDataFromGoogleSheets();
+            message.success(data.message);
+            
+            saveValuesToLocalStorage();
 
             return true;
         } catch(e) {
             console.log(e);
 
             return false;
+        } finally {
+            isNewAdding.value = false;
         }
+        
     };
+
+    const setData = (data) => {
+        const {
+            outcomeCategories,
+            incomeCategories,
+            lastPurchases: last,
+            quickTips: tips,
+            lastIncomes: incomes,
+            stats
+        } = data;
+
+        categories.income = incomeCategories.map(cat => ({label: cat, value: cat}));
+        categories.outcome = outcomeCategories.map(cat => ({label: cat, value: cat}));
+        lastPurchases.value = [
+            ...last.map(dat => ({ ...dat, type: 'outcome' })),
+            ...incomes.map(dat => ({ ...dat, type: 'income'}))
+        ].sort((a,b) => dayjs(a.date).isBefore(b.date) ? -1 : 1);
+        quickTips.value = tips;
+        finances.value = stats;
+
+        saveValuesToLocalStorage();
+    }
+
+    const saveValuesToLocalStorage = () => {
+        localStorage.setItem('data', JSON.stringify({
+            outcomeCategories: categories.income,
+            incomeCategories: categories.outcome,
+            lastPurchases: lastPurchases.value,
+            quickTips: quickTips.value,
+            lastIncomes: [],
+            stats: finances.value
+        }));
+    }
 
     return {
         getDataFromGoogleSheets,
@@ -76,6 +113,7 @@ export const useFinance = () => {
         lastPurchases,
         quickTips,
         finances,
-        isDataLoading
+        isDataLoading,
+        isNewAdding
     }
 }

@@ -13,7 +13,8 @@ export interface IRowData {
     category: string|null,
     sum: number,
     description: string,
-    type?: string
+    type?: string,
+    loading: boolean
 }
 
 export interface IQuickTip {
