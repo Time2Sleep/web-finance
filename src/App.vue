@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useAuth } from './composables/useAuth';
-import MainView from './views/MainView.vue';
 import AuthView from './views/AuthView.vue';
 
 const { isAuthenticated } = useAuth();
@@ -8,7 +7,7 @@ const { isAuthenticated } = useAuth();
 
 <template>
   <div class="container">
-    <MainView v-if="isAuthenticated"/>
+    <RouterView  v-if="isAuthenticated"/>
     <AuthView v-else/>
   </div>
 </template>

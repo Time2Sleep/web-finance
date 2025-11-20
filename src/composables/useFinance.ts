@@ -19,11 +19,7 @@ export const useFinance = () => {
     const getDataFromGoogleSheets = async () => {
         isDataLoading.value = true;
 
-        const stored = localStorage.getItem('data');
-        if(stored){
-            setData(JSON.parse(stored));
-        } 
-            
+        getDataFromLocalStorage();            
 
         try {
             const { data } = await fetchFinanceData();
@@ -86,8 +82,8 @@ export const useFinance = () => {
         categories.income = incomeCategories.map(cat => ({label: cat, value: cat}));
         categories.outcome = outcomeCategories.map(cat => ({label: cat, value: cat}));
         lastPurchases.value = [
-            ...last.map(dat => ({ ...dat, type: 'outcome' })),
-            ...incomes.map(dat => ({ ...dat, type: 'income'}))
+            ...incomes.map(dat => ({ ...dat, type: 'income'})),
+            ...last.map(dat => ({ ...dat, type: 'outcome' }))
         ].sort((a,b) => dayjs(a.date).isBefore(b.date) ? -1 : 1);
         quickTips.value = tips;
         finances.value = stats;
@@ -96,14 +92,33 @@ export const useFinance = () => {
     }
 
     const saveValuesToLocalStorage = () => {
-        localStorage.setItem('data', JSON.stringify({
-            outcomeCategories: categories.income,
-            incomeCategories: categories.outcome,
-            lastPurchases: lastPurchases.value,
-            quickTips: quickTips.value,
-            lastIncomes: [],
-            stats: finances.value
-        }));
+        localStorage.setItem('categories', JSON.stringify(categories));
+        localStorage.setItem('lastPurchases', JSON.stringify(lastPurchases.value));
+        localStorage.setItem('quickTips', JSON.stringify(quickTips.value));
+        localStorage.setItem('finances', JSON.stringify(finances.value));
+    }
+
+    const getDataFromLocalStorage = () => {
+        const storedCategories = localStorage.getItem('categories');
+        if (storedCategories) {
+            categories.income = JSON.parse(storedCategories).income ?? [];
+            categories.outcome = JSON.parse(storedCategories).outcome ?? [];
+        }
+
+        const storedPurchases = localStorage.getItem('lastPurchases');
+        if (storedPurchases) {
+            lastPurchases.value = JSON.parse(storedPurchases) ?? [];
+        }
+
+        const storedTips = localStorage.getItem('quickTips');
+        if (storedTips) {
+            quickTips.value = JSON.parse(storedTips) ?? [];
+        }
+
+        const storedFinances = localStorage.getItem('finances');
+        if (storedFinances) {
+            finances.value = JSON.parse(storedFinances) ?? [];
+        }
     }
 
     return {

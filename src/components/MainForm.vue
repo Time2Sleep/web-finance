@@ -19,18 +19,28 @@ const isBtnDisabled = computed<boolean>(() => {
     return !sum.value || sum.value <= 0 || !curCat.value || !date.value || pending.value
 });
 
-const handleSubmit = async () => {
+const handleSubmit = () => {
     pending.value = true;
 
-    await saveNew({
+    const backup = {
         date: date.value.format('YYYY-MM-DD'),
         sum: sum.value!.toString(),
         action: mode.value,
         description: description.value,
         category: curCat.value
+    };
+
+    saveNew(backup).then(res => {
+        if (!res) {
+            date.value = dayjs(backup.date);
+            sum.value = Number(backup.sum);
+            mode.value = backup.action;
+            description.value = backup.description;
+            curCat.value = backup.category;
+        }
     });
 
-    setTimeout(resetValues, 1000);
+    setTimeout(resetValues, 500);
 };
 
 const handleQuickClick = (quick: IQuickTip) => {

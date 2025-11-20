@@ -19,7 +19,12 @@ onMounted(scrollDown);
 <template>
     <div class="last" ref="container">
       <TransitionGroup name="list">
-        <div v-for="{date,category,sum,description,type, loading} in lastPurchases" class="last__row py-0.5" :key="date+sum+type">
+        <RouterLink 
+          v-for="{date,category,sum,description,type, loading} in lastPurchases" 
+          class="last__row py-0.5" 
+          to="/operations"
+          :key="date+sum+type" 
+        >
           <a-spin :spinning="!!loading">
             <div class="flex w-full justify-between">
               <div class="text-left">{{ dayjs(date).format('DD.MM.YYYY') }}</div>
@@ -30,39 +35,7 @@ onMounted(scrollDown);
               <div class="last__category">{{description}}</div>
             </div>
           </a-spin>
-        </div>
+        </RouterLink>
       </TransitionGroup>
     </div>
 </template>
-
-<style scoped lang="scss">
-.last {
-    color: black;
-    width: 100%;
-    height: 200px;
-    overflow-y: auto;
-
-    &__row {
-        font-size: 14px !important;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-    }
-
-    &__category{
-        text-align: start;
-    }
-
-    &__description{
-        text-align: left;
-        font-size: 10px;
-    }
-
-    &__price {
-      color: rgb(180, 0, 0);
-      text-align: end;
-
-      &.income {
-        color: rgb(0, 180, 0)
-      }
-    }
-}
-</style>
